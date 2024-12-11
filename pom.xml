@@ -20,49 +20,53 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>17</java.version>
+		<amazon-awssdk.version>1.12.779</amazon-awssdk.version>
+		<spring-cloud-aws.version>3.1.0</spring-cloud-aws.version>
+		<springdoc-openapi.version>2.6.0</springdoc-openapi.version>
 	</properties>
 
 	<modules>
 		<module>letter-sender</module>
+		<module>letter-processor-service</module>
 	</modules>
 
 	<dependencies>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
-		</dependency>
+		<!--		<dependency>-->
+		<!--			<groupId>org.springframework.boot</groupId>-->
+		<!--			<artifactId>spring-boot-starter</artifactId>-->
+		<!--		</dependency>-->
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
+		<!--		<dependency>-->
+		<!--			<groupId>org.springframework.boot</groupId>-->
+		<!--			<artifactId>spring-boot-starter-web</artifactId>-->
+		<!--		</dependency>-->
 
 		<!-- dynamoDB -->
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-commons</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.amazonaws</groupId>
-			<artifactId>aws-java-sdk-dynamodb</artifactId>
-			<version>1.12.779</version>
-		</dependency>
-		<dependency>
-			<groupId>com.github.derjust</groupId>
-			<artifactId>spring-data-dynamodb</artifactId>
-			<version>5.1.0</version>
-		</dependency>
+		<!--		<dependency>-->
+		<!--			<groupId>org.springframework.data</groupId>-->
+		<!--			<artifactId>spring-data-commons</artifactId>-->
+		<!--		</dependency>-->
+		<!--		<dependency>-->
+		<!--			<groupId>com.amazonaws</groupId>-->
+		<!--			<artifactId>aws-java-sdk-dynamodb</artifactId>-->
+		<!--			<version>1.12.779</version>-->
+		<!--		</dependency>-->
+		<!--		<dependency>-->
+		<!--			<groupId>com.github.derjust</groupId>-->
+		<!--			<artifactId>spring-data-dynamodb</artifactId>-->
+		<!--			<version>5.1.0</version>-->
+		<!--		</dependency>-->
 
-<!--		<dependency>-->
-<!--			<groupId>io.awspring.cloud</groupId>-->
-<!--			<artifactId>spring-cloud-aws-starter-sqs</artifactId>-->
-<!--		</dependency>-->
+		<!--		<dependency>-->
+		<!--			<groupId>io.awspring.cloud</groupId>-->
+		<!--			<artifactId>spring-cloud-aws-starter-sqs</artifactId>-->
+		<!--		</dependency>-->
 
-<!--		<dependency>-->
-<!--			<groupId>io.awspring.cloud</groupId>-->
-<!--			<artifactId>spring-cloud-aws-starter-sns</artifactId>-->
-<!--		</dependency>-->
+		<!--		<dependency>-->
+		<!--			<groupId>io.awspring.cloud</groupId>-->
+		<!--			<artifactId>spring-cloud-aws-starter-sns</artifactId>-->
+		<!--		</dependency>-->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -83,14 +87,22 @@
 
 	<dependencyManagement>
 		<dependencies>
+			<!-- To choose the AWS SDK version -->
+			<dependency>
+				<groupId>com.amazonaws</groupId>
+				<artifactId>aws-java-sdk-bom</artifactId>
+				<version>${amazon-awssdk.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
 			<dependency>
 				<groupId>io.awspring.cloud</groupId>
-				<artifactId>spring-cloud-aws</artifactId>
-				<version>3.1.0</version>
+				<artifactId>spring-cloud-aws-dependencies</artifactId>
+				<version>${spring-cloud-aws.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	
+
 </project>

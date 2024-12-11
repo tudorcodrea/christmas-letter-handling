@@ -1,0 +1,36 @@
+# running a sh script on a docker container
+docker ps
+docker exec -i 74c30df33a2c /bin/sh < localstack-init.sh
+
+
+aws configure set aws_access_key_id "test" --profile test-profile &&
+aws configure set aws_secret_access_key "test" --profile test-profile &&
+aws configure set region "us-east-1" --profile test-profile &&
+aws configure set output "table" --profile test-profile
+
+aws --endpoint-url=http://localhost:4566 sns create-topic --name letter-topic --region us-east-1 --profile test-profile --output table
+
+aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name letter-queue --profile test-profile --region us-east-1 --output table
+
+aws --endpoint-url=http://localhost:4566 sns subscribe --topic-arn arn:aws:sns:us-east-1:000000000000:letter-topic --profile test-profile  --protocol sqs --notification-endpoint http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/letter-queue --output table
+
+aws --endpoint-url=http://localhost:4566 sqs receive-message --queue-url http://localhost:4566/000000000000/letter-queue --profile test-profile --region us-east-1 --output json
+
+
+aws sns list-topics --region us-east-1 --profile test-profile --output table
+
+aws sns set-subscription-attributes --subscription-arn arn:aws:sns:us-east-1:000000000000:letter-topic --attribute-name RawMessageDelivery --attribute-value true --profile test-profile --region us-east-1
+
+aws --endpoint-url=http://localhost:4566 sns subscribe --topic-arn arn:aws:sns:eu-central-1:000000000000:order-creation-events --profile test-profile  --protocol sqs --notification-endpoint arn:aws:sqs:us-east-1:000000000000:letter-queue --output table
+aws --endpoint-url=http://localhost:4566 sqs receive-message --queue-url http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/letter-queue --profile test-profile --region us-east-1 --output json > out.json
+
+awslocal sns list-topics
+awslocal sqs list-queues
+awslocal --endpoint-url=http://localhost:4566 sqs receive-message --queue-url http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/letter-queue
+awslocal --endpoint-url=http://localhost:4566 sns subscribe --topic-arn arn:aws:sns:us-east-1:000000000000:letter-topic --protocol sqs --notification-endpoint arn:aws:sqs:us-east-1:000000000000:letter-queue --output json | cat
+
+awslocal sns set-subscription-attributes --subscription-arn arn:aws:sns:us-east-1:000000000000:letter-topic --attribute-name RawMessageDelivery --attribute-value true
+
+aws --endpoint-url=http://localhost:4566 sqs receive-message --queue-url http://localhost:4566/000000000000/dummy-queue --output json | cat
+aws --endpoint-url=http://localhost:4566 sqs receive-message --queue-url http://localhost:4566/000000000000/dummy-queue --output json | cat
+

@@ -1,0 +1,33 @@
+spring:
+  application.name: letter-sender
+  cloud.aws.sns.endpoint: http://localhost:4566
+  cloud:
+    aws:
+      region:
+        static: us-east-1
+      credentials:
+        access-key: test
+        secret-key: test
+      sns:
+        region: us-east-1
+
+io:
+  reflectoring:
+    aws:
+      sns:
+        topic-arn: arn:aws:sns:us-east-1:000000000000:letter-topic
+      sqs:
+        topic-arn: arn:aws:sqs:us-east-1:000000000000:letter-queue
+
+logging:
+    org.springframework.cloud: DEBUG
+aws:
+    snsDestination: letter-topic
+
+config:
+  aws:
+    region: us-east-1
+    dynamodb:
+      url: http://127.0.0.1:4566
+      access-key: test
+      secret-key: test

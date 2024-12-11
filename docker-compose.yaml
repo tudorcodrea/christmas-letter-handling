@@ -1,0 +1,79 @@
+services:
+  localstack:
+    image: localstack/localstack:latest
+    hostname: localstack
+    ports:
+      # Map the port, so you can access the API from the host machine
+      - 4566:4566 # LocalStack main endpoint
+      - 8000:8000 # DynamoDB local UI
+    environment:
+      # LocalStack configuration: https://docs.localstack.cloud/references/configuration/
+      - DEBUG=1
+      - PERSISTENCE=1
+      - SERVICES=sns,sqs,dynamodb
+      - HOSTNAME_EXTERNAL=localstack
+    volumes:
+      - ./localstack-data:/var/lib/localstack #Persist data
+      - ./localstack-setup.sh:/etc/localstack/init/ready.d/init.sh
+
+
+#services:
+#  localstack:
+#    image: localstack/localstack
+#    ports:
+#      - "4566:4566" # Use port 4566 for both DynamoDB and S3
+#    environment:
+#      - SERVICES=dynamodb,sns,sqs
+
+#services:
+#  localstack:
+#    image: localstack/localstack:latest
+#    ports:
+#      - 4566:4566
+#      - 8000:8000
+#    environment:
+#      - SERVICES=sns,sqs,dynamodb
+#      - DEBUG=1
+#      - PERSISTENCE=1
+#    volumes:
+#      - ./localstack-data:/var/lib/localstack
+#      - ./init.sh:/etc/localstack/init/ready.d/init.sh
+#    networks:
+#      - christmas
+#
+#  letter-sender-service:
+#    container_name: letter-sender-service
+#    image: letter-sender-service
+#    platform: linux/amd64
+#    ports:
+#      - 8080:8080
+#    depends_on:
+#      - localstack
+#    environment:
+#      spring.cloud.aws.sns.endpoint: 'http://localstack:4566'
+#      spring.cloud.aws.credentials.access-key: test
+#      spring.cloud.aws.credentials.secret-key: test
+#      spring.cloud.aws.sns.region: 'us-central-1'
+#      letter-sender.christmas.aws.sns.topic-arn: 'arn:aws:sns:us-central-1:000000000000:christmas-letter-created'
+#    networks:
+#      - christmas
+#
+#  letter-processor-service:
+#    container_name: letter-processor-service
+#    image: letter-processor-service
+#    platform: linux/amd64
+#    ports:
+#      - 8081:8081
+#    depends_on:
+#      - localstack
+#    environment:
+#      spring.cloud.aws.sqs.endpoint: 'http://localstack:4566'
+#      spring.cloud.aws.credentials.access-key: test
+#      spring.cloud.aws.credentials.secret-key: test
+#      spring.cloud.aws.sqs.region: 'us-central-1'
+#      letter-processor.christmas.aws.sqs.queue-url: 'http://sqs.us-central-1.localhost.localstack.cloud:4566/000000000000/christmas-letter-queue'
+#    networks:
+#      - christmas
+#
+#networks:
+#  christmas:

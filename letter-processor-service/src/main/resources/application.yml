@@ -1,0 +1,50 @@
+server:
+  port: 8081
+
+aws:
+  region: us-east-1
+  access-key: test
+  secret-key: test
+  queueName: letter-queue
+
+spring:
+  application.name: letter-processor
+  cloud:
+    aws:
+      region:
+        static: us-east-1
+      credentials:
+        access-key: test
+        secret-key: test
+      sns:
+        region: us-east-1
+        topic-arn: arn:aws:sns:us-east-1:000000000000:letter-topic
+        endpoint: http://localhost:4566
+      sqs:
+        region: us-east-1
+        topic-arn: arn:aws:sqs:us-east-1:000000000000:letter-queue
+        queue-name: letter-queue
+
+io:
+  reflectoring:
+    aws:
+      region: us-east-1
+      sns:
+        topic-arn: arn:aws:sns:us-east-1:000000000000:letter-topic
+      sqs:
+        topic-arn: arn:aws:sqs:us-east-1:000000000000:letter-queue
+
+logging:
+    org.springframework.cloud: DEBUG
+
+config:
+  aws:
+    region: us-east-1
+    dynamodb:
+      url: http://127.0.0.1:4566
+      access-key: test
+      secret-key: test
+
+#events:
+#  queues:
+#    letter-queue: letter-queue
