@@ -10,6 +10,9 @@ spring:
         secret-key: test
       sns:
         region: us-east-1
+        group:
+          name: letter-group
+          sender-id: letter-sender
 
 io:
   reflectoring:

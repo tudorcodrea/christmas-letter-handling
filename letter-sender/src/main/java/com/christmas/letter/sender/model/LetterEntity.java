@@ -1,6 +1,6 @@
 package com.christmas.letter.sender.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import jdk.jfr.Enabled;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,18 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LetterMessage {
+public class LetterEntity {
 
-  @JsonProperty("email")
   private String email;
-
-  @JsonProperty("name")
   private String name;
-
-  @JsonProperty("content")
   private String content;
 
-  @JsonProperty("timestamp")
   private long timestamp;
-
 }
