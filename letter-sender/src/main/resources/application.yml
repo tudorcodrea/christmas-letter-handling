@@ -12,7 +12,7 @@ spring:
         region: us-east-1
         group:
           name: letter-group
-          sender-id: letter-sender
+          sender-id: letter-sender-1
 
 io:
   reflectoring:

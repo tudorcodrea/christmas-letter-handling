@@ -23,6 +23,6 @@ awslocal dynamodb create-table \
   --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 || true
 
 echo "Initializing the subscription to the topic"
-awslocal sns subscribe --topic-arn arn:aws:sns:us-east-1:000000000000:letter-topic --protocol sqs --notification-endpoint arn:aws:sqs:us-east-1:000000000000:letter-queue || true
+awslocal sns subscribe --topic-arn arn:aws:sns:us-east-1:000000000000:letter-topic --protocol sqs --notification-endpoint arn:aws:sqs:us-east-1:000000000000:letter-queue --attributes RawMessageDelivery=true || true
 
 echo "Resource initialization is complete"

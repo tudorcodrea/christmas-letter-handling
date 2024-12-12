@@ -2,7 +2,7 @@
 docker ps
 docker exec -i ff016f3ff01a /bin/sh < localstack-init.sh
 
-docker exec -it ff016f3ff01a sh
+docker exec -it ff016f3ff01a  sh
 
 aws configure set aws_access_key_id "test" --profile test-profile &&
 aws configure set aws_secret_access_key "test" --profile test-profile &&
@@ -31,6 +31,8 @@ awslocal sns list-topics
 awslocal sqs list-queues
 awslocal --endpoint-url=http://localhost:4566 sqs receive-message --queue-url http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/letter-queue
 awslocal --endpoint-url=http://localhost:4566 sns subscribe --topic-arn arn:aws:sns:us-east-1:000000000000:letter-topic --protocol sqs --notification-endpoint arn:aws:sqs:us-east-1:000000000000:letter-queue --output json | cat
+
+awslocal sns subscribe --topic-arn arn:aws:sns:us-east-1:000000000000:letter-topic --protocol sqs --notification-endpoint arn:aws:sqs:us-east-1:000000000000:letter-queue --attributes RawMessageDelivery=true
 
 awslocal sns set-subscription-attributes --subscription-arn arn:aws:sns:us-east-1:000000000000:letter-topic --attribute-name RawMessageDelivery --attribute-value true
 
