@@ -1,0 +1,16 @@
+spring:
+  cloud:
+    aws:
+      credentials:
+        access-key: ${AWS_ACCESS_KEY}
+        secret-key: ${AWS_SECRET_KEY}
+      sns:
+        region: eu-central-1
+
+arn:
+  aws:
+    sns:
+      topic-arn: christmas-letter-queue
+
+aws:
+  region: eu-central-1
