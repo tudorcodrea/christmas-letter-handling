@@ -17,7 +17,7 @@ public class SenderController {
 
   @PostMapping("/send")
   public ResponseEntity<HttpStatus> sendLetter(@RequestBody LetterDto letterDto) {
-    log.info("Sending letter to Santa from {}.", letterDto.getName());
+    log.info("Sending letter to Santa from {}.", letterDto.name());
     letterSenderService.send(letterDto);
 
     return ResponseEntity.status(HttpStatus.CREATED).build();
