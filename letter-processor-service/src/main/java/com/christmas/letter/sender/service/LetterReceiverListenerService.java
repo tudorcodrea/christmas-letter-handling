@@ -1,6 +1,8 @@
 package com.christmas.letter.sender.service;
 
 import com.christmas.letter.sender.model.LetterMessage;
+import com.christmas.letter.sender.model.adapter.LetterModelAdapter;
+import com.christmas.letter.sender.repository.LetterRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,6 +11,7 @@ import jakarta.validation.Valid;
 import java.util.Map;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Headers;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.utils.CollectionUtils;
@@ -17,12 +20,19 @@ import software.amazon.awssdk.utils.CollectionUtils;
 @Log4j2
 public class LetterReceiverListenerService {
 
+  @Autowired
+  private LetterModelAdapter letterModelAdapter;
+
+  @Autowired
+  private LetterRepository letterRepository;
+
   //   http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/letter-queue
   // automatically deletes the messages from queue upon successful receiving
   // need spring cloud to configure object mapper to convert the message to the object
   // listener behind we can configure delay in receiving messages
   @SqsListener(value = "${spring.cloud.aws.sqs.queue-name}", maxConcurrentMessages = "10", acknowledgementMode = "ON_SUCCESS")
-  public void receiveLetterMessages(@Valid @NonNull final String messageBody, @Headers Map<String, Object> messageHeaders) {
+  public void receiveLetterMessages(@Valid @NonNull final String messageBody,
+                                    @Headers Map<String, Object> messageHeaders) {
 
     log.info("Received message: {}", messageBody);
     log.info("Message headers: {}", messageHeaders);
@@ -30,10 +40,12 @@ public class LetterReceiverListenerService {
     if (CollectionUtils.isNotEmpty(messageHeaders) && isValidMessageHeader(messageHeaders)) {
 
       try {
-
         var objectMapper = getObjectMapper();
         var letterMessage = objectMapper.readValue(messageBody, LetterMessage.class);
         log.info("Letter Message object {}", letterMessage);
+
+        var letterEntity = letterModelAdapter.toEntity(letterMessage);
+        letterRepository.save(letterEntity);
 
       } catch (JsonProcessingException e) {
         log.error("Json mapping exception {}", e.getMessage());
@@ -46,11 +58,9 @@ public class LetterReceiverListenerService {
 
   private boolean isValidMessageHeader(Map<String, Object> messageHeaders) {
 
-    var wishCategory =
-        messageHeaders.containsKey("wishCategory") ? messageHeaders.get("wishCategory") : "";
-    var messageGroup =
-        messageHeaders.containsKey("messageGroupId") ? messageHeaders.get("messageGroupId") : "";
-    var senderId = messageHeaders.containsKey("senderId") ? messageHeaders.get("senderId") : "";
+    var wishCategory = messageHeaders.getOrDefault("wishCategory", "");
+    var messageGroup = messageHeaders.getOrDefault("messageGroupId", "");
+    var senderId = messageHeaders.getOrDefault("senderId", "");
 
     if ((wishCategory.equals("Electronics") || wishCategory.equals("Toys")) &&
         messageGroup.equals("letter-group") && senderId.equals("letter-sender-1")) {
@@ -65,6 +75,4 @@ public class LetterReceiverListenerService {
     om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     return om;
   }
-
-
 }

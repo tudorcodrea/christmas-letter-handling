@@ -3,6 +3,7 @@ package com.christmas.letter.sender.service;
 import com.christmas.letter.sender.config.AwsProperties;
 import com.christmas.letter.sender.model.LetterDto;
 import com.christmas.letter.sender.model.LetterEntity;
+import com.christmas.letter.sender.model.MessageType;
 import com.christmas.letter.sender.model.WishCategory;
 import com.christmas.letter.sender.model.adapter.LetterModelAdapter;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -15,6 +16,7 @@ import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.MessagingException;
 import org.springframework.stereotype.Service;
@@ -60,14 +62,14 @@ public class LetterPublisherService {
     } catch (MessagingException e) {
       log.error("Messaging exception {}", e.getMessage());
     }
-
-
   }
 
   private Map<String, Object> createMessageHeaders() {
     var headersMap = new HashMap<String, Object>();
     headersMap.put("messageGroupId", messageGroupId);
     headersMap.put("senderId", messageSenderId);
+    headersMap.put("messageType", MessageType.LETTER.getMessageType());
+    headersMap.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
     return headersMap;
   }
 }

@@ -20,7 +20,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>17</java.version>
-		<amazon-awssdk.version>1.12.779</amazon-awssdk.version>
+		<amazon-awssdk.version>2.29.52</amazon-awssdk.version>
 		<spring-cloud-aws.version>3.1.0</spring-cloud-aws.version>
 		<springdoc-openapi.version>2.6.0</springdoc-openapi.version>
 	</properties>
@@ -89,10 +89,14 @@
 		<dependencies>
 			<!-- To choose the AWS SDK version -->
 			<dependency>
-				<groupId>com.amazonaws</groupId>
-				<artifactId>aws-java-sdk-bom</artifactId>
+				<groupId>software.amazon.awssdk</groupId>
+				<artifactId>bom</artifactId>
 				<version>${amazon-awssdk.version}</version>
 				<type>pom</type>
+<!--				<groupId>com.amazonaws</groupId>-->
+<!--				<artifactId>aws-java-sdk-bom</artifactId>-->
+<!--				<version>${amazon-awssdk.version}</version>-->
+<!--				<type>pom</type>-->
 				<scope>import</scope>
 			</dependency>
 			<dependency>

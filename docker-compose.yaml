@@ -15,6 +15,10 @@ services:
     volumes:
       - ./localstack-data:/var/lib/localstack #Persist data
       - ./localstack-setup.sh:/etc/localstack/init/ready.d/init.sh
+      - ./init.sh:/localstack-init.sh
+#    entrypoint: sh -c "/localstack-init.sh"
+    command:
+      - /bin/sh < localstack-init.sh
 
 
 #services:

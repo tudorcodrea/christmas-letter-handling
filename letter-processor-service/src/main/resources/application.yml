@@ -6,6 +6,10 @@ aws:
   access-key: test
   secret-key: test
   queueName: letter-queue
+  dynamodb:
+    url: http://127.0.0.1:4566
+    access-key: test
+    secret-key: test
 
 spring:
   application.name: letter-processor
@@ -24,6 +28,9 @@ spring:
         region: us-east-1
         topic-arn: arn:aws:sqs:us-east-1:000000000000:letter-queue
         queue-name: letter-queue
+      dynamodb:
+        region: us-east-1
+        endpoint: http://localhost:4566
 
 io:
   reflectoring:
