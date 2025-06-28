@@ -1,0 +1,84 @@
+@startuml
+!define RECTANGLE_COLOR #ADD8E6
+!define DATABASE_COLOR #F5F5DC
+!define CLOUD_COLOR #D3D3D3
+
+skinparam rectangle {
+    BackgroundColor RECTANGLE_COLOR
+    BorderColor Black
+}
+
+skinparam database {
+    BackgroundColor DATABASE_COLOR
+    BorderColor Black
+}
+
+skinparam cloud {
+    BackgroundColor CLOUD_COLOR
+    BorderColor Black
+}
+
+actor "End User" as User
+actor "Bike Provider" as Provider
+
+rectangle "Frontend Layer" {
+    User --> "Web App"
+    User --> "Mobile App"
+    Provider --> "Web App"
+    Provider --> "Mobile App"
+}
+
+rectangle "API Gateway" as Gateway {
+    "Web App" --> Gateway
+    "Mobile App" --> Gateway
+}
+
+rectangle "Microservices Layer" {
+    rectangle "User Management Service" as UMS
+    rectangle "Bike Management Service" as BMS
+    rectangle "Payment Service" as PS
+    rectangle "Notification Service" as NS
+    rectangle "Analytics Service" as AS
+
+    Gateway --> UMS
+    Gateway --> BMS
+    Gateway --> PS
+    Gateway --> NS
+    Gateway --> AS
+}
+
+cloud "Cloud Infrastructure" {
+    rectangle "Compute (Kubernetes)" as Compute
+    rectangle "Storage (AWS S3)" as Storage
+    rectangle "Messaging (Kafka)" as Messaging
+
+    UMS --> Compute
+    BMS --> Compute
+    PS --> Compute
+    NS --> Compute
+    AS --> Compute
+
+    UMS --> Storage
+    BMS --> Storage
+    PS --> Storage
+    NS --> Messaging
+    AS --> Messaging
+}
+
+database "Relational Database (PostgreSQL)" as RDB
+database "NoSQL Database (MongoDB)" as NoSQL
+
+UMS --> RDB
+BMS --> RDB
+PS --> RDB
+AS --> NoSQL
+
+rectangle "External Integrations" {
+    rectangle "Payment Gateway" as PG
+    rectangle "Vendor APIs" as Vendor
+
+    PS --> PG
+    BMS --> Vendor
+}
+
+@enduml

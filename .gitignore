@@ -53,3 +53,10 @@ build/
 
 ### VS Code ###
 .vscode/
+localstack-data/cache/machine.json
+localstack-data/cache/server.test.pem
+localstack-data/cache/server.test.pem.crt
+localstack-data/cache/server.test.pem.key
+localstack-data/cache/service-catalog-4_0_4_dev6-1_35_71.pickle
+localstack-data/state/dynamodb/000000000000_us-east-1.db
+localstack-data/state/dynamodb/000000000000useast1_us-east-1.db

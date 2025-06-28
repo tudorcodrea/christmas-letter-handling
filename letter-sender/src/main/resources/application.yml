@@ -12,6 +12,7 @@ spring:
         region: us-east-1
         group:
           name: letter-group
+          id: letter-group-1
           sender-id: letter-sender-1
 
 io:
